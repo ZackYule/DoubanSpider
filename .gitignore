@@ -1,7 +1,14 @@
+/结果文件
+*.pyc
+*.swp
+storage/
+.idea/
+.DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+DoubanSpider/real_settings.py
 
 # C extensions
 *.so
