@@ -34,14 +34,17 @@ DOWNLOAD_DELAY = 12
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-DEFAULT_REQUEST_HEADERS = {
-    
+DEFAULT_REQUEST_HEADERS = { 
+    'Accept': '*/*', 
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36', 
+    'X-Requested-With': 'XMLHttpRequest', 
+    'Cookie': 'your cookie'
 }
 
 # Enable or disable spider middlewares

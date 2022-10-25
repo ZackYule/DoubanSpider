@@ -31,5 +31,5 @@ class DoubanspiderPipeline:
                 writer.writerow([item[key] for key in item.keys()])
 
     def process_item(self, item, spider):
-        self.csv_pipeline(item['note_item'],item['keyword'],'日记内容',['标题','内容','作者','作者主页','发布时间'])
+        self.csv_pipeline(item['note_item'],item['keyword'],'日记内容',['标题','内容','发布地址','作者','作者主页','发布时间','喜欢数','收藏数','转发数'])
         return item
