@@ -2,9 +2,10 @@ from email import contentmanager
 import scrapy
 from scrapy.utils.project import get_project_settings
 from scrapy.selector import Selector
+from DoubanSpider.items import DoubanNoteItem
 import json
 
-class DoubanSpider(scrapy.Spider):
+class NoteSpider(scrapy.Spider):
     settings = get_project_settings()
     keyword = settings.get('KEYWORD')
 
@@ -21,8 +22,8 @@ class DoubanSpider(scrapy.Spider):
     def parse(self, response):
         self.list_count += 1
         self.logger.debug(f'目前页数为第{self.list_count}页')
-        self.logger.debug(f'请求头为：{response.request.headers}页')
-        self.logger.debug(f'cookies为：{response.request.cookies}页')
+        self.logger.debug(f'请求头为：{response.request.headers}')
+        self.logger.debug(f'cookies为：{response.request.cookies}')
         # 获取笔记链接
         note_result_list = response.xpath("//div[@class='title']").getall()
         
@@ -65,7 +66,7 @@ class DoubanSpider(scrapy.Spider):
         
         # 获取更多列表
         if response_dict['more']:
-            self.logger.debug(f'还有下一页，目前页数为第{self.list_count}页')
+            self.logger.info(f'还有下一页，目前页数为第{self.list_count}页')
             url = f'https://www.douban.com/j/search?q={self.keyword}&start={20*self.list_count}&cat=1015'
             yield scrapy.Request(url=url, callback=self.parse_more_note_page_data)
     
@@ -87,18 +88,17 @@ class DoubanSpider(scrapy.Spider):
         self.logger.debug(f'转发数是：{react_num}')
         self.logger.debug(f'转发数是：{rec_num}')
 
-        yield {
-            'keyword': self.keyword,
-            'class':'note',
-            'note_item': {
-                'title': title,
-                'content': content,
-                'url':response.url,
-                'author_name': author_name,
-                'author_url': author_url,
-                'pub_time': pub_time,
-                'like_num': like_num,
-                'react_num': react_num,
-                'rec_num': rec_num,
-            },
-        }
+        note_item = DoubanNoteItem()
+        note_item['title'] = title
+        note_item['content'] = content
+        note_item['url'] = response.url
+        note_item['author_name'] = author_name
+        note_item['author_url'] = author_url
+        note_item['pub_time'] = pub_time
+        note_item['like_num'] = like_num
+        note_item['react_num'] = react_num
+        note_item['rec_num'] = rec_num
+        note_item['keyword'] = self.keyword
+        note_item['content_type'] = 'note'
+
+        yield note_item
